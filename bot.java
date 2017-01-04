@@ -112,7 +112,7 @@ public class bot{
                     String user=tweetResult.getUser().getScreenName();
                     List<Status> statuses= twitter.getUserTimeline(user);
 
-                    Status status = twitter.updateStatus("Good morning "+cities.get(hour)+"! Have a great day @"+user);
+                    Status status = twitter.updateStatus("Good morning "+cities.get(hour)+"! Have a wonderful day today @"+user+" !");
                     List<String> sum=new ArrayList<>();
                     List<Integer> sums=new ArrayList<>();
                     for(Status s:statuses){
