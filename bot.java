@@ -99,55 +99,60 @@ public class bot{
         String stuff=sdfa.format(new Date());
         System.out.println("Initiated at "+stuff);
         while(true){
-            SimpleDateFormat sdf = new SimpleDateFormat("HH");
-            stuff=sdfa.format(new Date());
-            String str = sdf.format(new Date());
-            int hour=Integer.parseInt(str);
-            try{
-                if(hour!=21&&hour!=5){
-                    Query query = new Query();
-                    query.setGeoCode(geo.get(hour),200,Query.KILOMETERS);
-                    QueryResult result = twitter.search(query);
-                    Status tweetResult = result.getTweets().get(0);
-                    String user=tweetResult.getUser().getScreenName();
-                    List<Status> statuses= twitter.getUserTimeline(user);
+            SimpleDateFormat sss = new SimpleDateFormat("mm");
+            String check=sss.format(new Date());
+            if(check.equals("00")){
+              SimpleDateFormat sdf = new SimpleDateFormat("HH");
+              stuff=sdfa.format(new Date());
+              String str = sdf.format(new Date());
+              int hour=Integer.parseInt(str);
+              try{
+                  if(hour!=21&&hour!=5){
+                      Query query = new Query();
+                      query.setGeoCode(geo.get(hour),200,Query.KILOMETERS);
+                      QueryResult result = twitter.search(query);
+                      Status tweetResult = result.getTweets().get(0);
+                      String user=tweetResult.getUser().getScreenName();
+                      List<Status> statuses= twitter.getUserTimeline(user);
 
-                    Status status = twitter.updateStatus("Good morning "+cities.get(hour)+"! Have a wonderful day today @"+user+" !");
-                    List<String> sum=new ArrayList<>();
-                    List<Integer> sums=new ArrayList<>();
-                    for(Status s:statuses){
-                      //System.out.println("@" + s.getUser().getScreenName() + " - " + s.getText());
-                      String[] words=s.getText().split(" ");
-                      for(String a:words){
-                        if(!sum.contains(a)){
-                          sum.add(a);
-                          sums.add(1);
-                        }else{
-                          int b=sums.get(sum.indexOf(a));
-                          b++;
-                          sums.set(sum.indexOf(a),b);
+                      Status status = twitter.updateStatus("Good morning "+cities.get(hour)+"! Have a wonderful day today @"+user+" !");
+                      List<String> sum=new ArrayList<>();
+                      List<Integer> sums=new ArrayList<>();
+                      for(Status s:statuses){
+                        //System.out.println("@" + s.getUser().getScreenName() + " - " + s.getText());
+                        String[] words=s.getText().split(" ");
+                        for(String a:words){
+                          if(!sum.contains(a)){
+                            sum.add(a);
+                            sums.add(1);
+                          }else{
+                            int b=sums.get(sum.indexOf(a));
+                            b++;
+                            sums.set(sum.indexOf(a),b);
+                          }
                         }
                       }
-                    }
-                    int rec=0;int loops=0;int recLoop=0;
-                    for(int i:sums){
-                      loops++;
-                      if(i>rec){
-                        rec=i;
-                        recLoop=loops;
+                      int rec=0;int loops=0;int recLoop=0;
+                      for(int i:sums){
+                        loops++;
+                        if(i>rec){
+                          rec=i;
+                          recLoop=loops;
+                        }
                       }
-                    }
-                    System.out.println("@"+user+" has tweeted the word "+sum.get(recLoop)+" the most!");
-                    System.out.println("Successful tweet at "+stuff);
-                }
-            }catch(TwitterException e){
-                System.out.println(e);
+                      System.out.println("@"+user+" has tweeted the word "+sum.get(recLoop)+" the most!");
+                      System.out.println("Successful tweet at "+stuff);
+                  }
+              }catch(TwitterException e){
+                  System.out.println(e);
 
+              }
             }
 
 
 
-            delay((60*60*1000)-2000);
+
+            delay((60*1000));
             System.out.println("Going again!");
         }
     }
